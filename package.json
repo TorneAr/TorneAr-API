@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "dev": "cross-env NODE_ENV=development concurrently --names watcher,server --prefix-colors blue,green \"tsc --watch\" \"nodemon -q dist/index.js\"",
+    "dev": "concurrently --names watcher,server --prefix-colors blue,green \"tsc --watch\" \"nodemon -q dist/index.js\"",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,14 +22,16 @@
   "dependencies": {
     "apollo-server-core": "^3.5.0",
     "apollo-server-express": "^3.5.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "graphql": "^15.7.2",
+    "mongoose": "^6.0.12",
     "nexus": "^1.1.0",
+    "socket.io": "^4.3.2",
     "typescript": "^4.4.4"
   },
   "devDependencies": {
     "concurrently": "^6.3.0",
-    "cross-env": "^7.0.3",
     "rimraf": "^3.0.2"
   }
 }
