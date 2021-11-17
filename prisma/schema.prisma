@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongodb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator nexusPrisma {
+  provider = "nexus-prisma"
+}
+
+model User {
+  id             String  @id @default(dbgenerated()) @map("_id") @db.ObjectId /// The user's ID
+  name           String /// The user's name
+  surname        String /// The user's surname
+  phone          String /// The user's phone number
+  nickname       String  @unique /// The user's nickname. It must be unique
+  email          String  @unique /// The user's email. It must be unique
+  password       String /// The user's hashed password
+  emailConfirmed Boolean @default(false) /// A boolean indicating if the user's email has been confirmed
+  coins          Int     @default(0) /// The number of coins the user has
+}
