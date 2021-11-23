@@ -10,7 +10,6 @@ const httpServer = http.createServer(app);
 const io = new socketIo.Server(httpServer);
 
 const startApolloServer = async (typeDefs: any, resolvers: any) => {
-  console.log("typeDefs", typeDefs.resolvers);
   const server = new ApolloServer({
     typeDefs,
     resolvers: {

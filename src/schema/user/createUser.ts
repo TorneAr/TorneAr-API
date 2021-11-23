@@ -35,6 +35,4 @@ const createUser = extendType({
   },
 });
 
-console.log("createUser", createUser);
-
 export default [createUser];
