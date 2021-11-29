@@ -11,14 +11,7 @@ const io = new socketIo.Server(httpServer);
 
 const startApolloServer = async (typeDefs: any, resolvers: any) => {
   const server = new ApolloServer({
-    typeDefs,
-    resolvers: {
-      Mutation: {
-        createUser: () => {
-          console.log("create useeeeer");
-        },
-      },
-    },
+    schema: typeDefs,
     context: createContext,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });

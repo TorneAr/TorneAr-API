@@ -25,4 +25,6 @@ model User {
   password       String /// The user's hashed password
   emailConfirmed Boolean @default(false) /// A boolean indicating if the user's email has been confirmed
   coins          Int     @default(0) /// The number of coins the user has
+
+  @@map("users")
 }

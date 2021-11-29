@@ -18,18 +18,20 @@ const createUser = extendType({
         email: stringArg({ description: "The user's email" }),
         password: stringArg({ description: "The user's plain password" }),
       },
-      resolve: (parent, args, ctx: Context) => {
-        console.log("create user");
+      resolve: async (parent, args, ctx: Context) => {
         const password = bcrypt.hashSync(args.password, 10);
 
-        return { ok: true };
-
-        return ctx.db.user.create({
-          data: {
-            ...args,
-            password,
-          },
-        });
+        const user = await ctx.db.user
+          .create({
+            data: {
+              ...args,
+              password,
+            },
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        return user;
       },
     });
   },
