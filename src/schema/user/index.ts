@@ -1,3 +1,4 @@
+import user from "./user";
 import createUser from "./createUser";
 
-export default [...createUser];
+export default [...user, ...createUser];
