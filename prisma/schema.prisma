@@ -28,3 +28,56 @@ model User {
 
   @@map("users")
 }
+
+model Game {
+  id          String       @id @default(dbgenerated()) @map("_id") @db.ObjectId /// The game's ID
+  name        String /// Descriptive name of the game
+  code        String       @unique /// It's useful for identifying the game. It must be unique
+  status      String /// "betStarted" or "spinning"
+  activeUsers ActiveUser[]
+  betSeconds  Int /// Seconds the user has to bet
+  spinSeconds Int /// Time the spin will last
+  gameData    Json /// Data for the specific game
+
+  @@map("games")
+}
+
+model UserMatch {
+  id          String     @id @default(dbgenerated()) @map("_id") @db.ObjectId /// The userMatch's ID
+  userId      String     @unique @db.ObjectId
+  startDate   DateTime
+  endDate     DateTime
+  coinsBet    Int
+  coinsEarned Int
+  profit      Int
+  movements   Movement[]
+
+  @@map("userMatches")
+}
+
+// Additional models
+
+model ActiveUser {
+  id       String  @id @default(dbgenerated()) @map("_id") @db.ObjectId /// The user's ID
+  nickname String
+  bet      Bet     @relation(fields: [betId], references: [id])
+  gameId   String? @db.ObjectId
+  betId    String  @unique @db.ObjectId
+  game     Game?   @relation(fields: [gameId], references: [id])
+}
+
+model Bet {
+  id         String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  result     String
+  coins      Int
+  activeUser ActiveUser?
+}
+
+model Movement {
+  id          String     @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  coinsBet    Int
+  coinsEarned Int
+  profit      Int
+  UserMatch   UserMatch? @relation(fields: [userMatchId], references: [id])
+  userMatchId String?    @db.ObjectId
+}

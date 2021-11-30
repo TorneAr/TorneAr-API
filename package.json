@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
+    "dev": "rimraf dist && tsc-watch --onSuccess \"node dist/index.js\"",
     "start": "node dist/index.js",
     "generate-schema": "prisma generate",
     "lint-staged": "lint-staged",
@@ -31,7 +31,6 @@
     "express": "^4.17.1",
     "graphql": "^15.7.2",
     "module-alias": "^2.2.2",
-    "mongoose": "^6.0.12",
     "nexus": "^1.1.0",
     "nexus-prisma": "^0.34.0",
     "socket.io": "^4.3.2",
