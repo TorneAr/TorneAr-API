@@ -21,7 +21,7 @@ const createUser = extendType({
       resolve: async (parent, args, ctx: Context) => {
         const password = bcrypt.hashSync(args.password, 10);
 
-        const user = await ctx.db.user
+        const user = await ctx.prisma.user
           .create({
             data: {
               ...args,

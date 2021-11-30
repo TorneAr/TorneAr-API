@@ -9,8 +9,19 @@ const user = extendType({
       args: {
         id: nonNull(idArg({ description: "The user's ID" })),
       },
-      resolve: (parent, { id }, ctx: Context) => {
-        return ctx.db.user.findUnique({ where: { id } });
+      resolve: async (parent, { id }, ctx: Context) => {
+        console.log("find with id", id);
+        let user = await ctx.prisma.user.findUnique({
+          where: { id },
+          include: { matches: true },
+        });
+
+        // @ts-ignore
+        // user = { ...user, matches: [{ coinsBet: 32 }] };
+
+        console.log("user", user);
+
+        return user;
       },
     });
   },
