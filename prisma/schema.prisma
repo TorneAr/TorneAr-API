@@ -3,12 +3,14 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["mongodb"]
+  previewFeatures = ["dataproxy", "referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 generator nexusPrisma {
@@ -16,26 +18,26 @@ generator nexusPrisma {
 }
 
 model User {
-  id             String      @id @default(dbgenerated()) @map("_id") @db.ObjectId /// The user's ID
+  id             Int        @id @default(autoincrement()) /// The user's ID
+  games          UserGame[]
   name           String /// The user's name
   surname        String /// The user's surname
   phone          String /// The user's phone number
-  nickname       String      @unique /// The user's nickname. It must be unique
-  email          String      @unique /// The user's email. It must be unique
+  nickname       String     @unique /// The user's nickname. It must be unique
+  email          String     @unique /// The user's email. It must be unique
   password       String /// The user's hashed password
-  emailConfirmed Boolean     @default(false) /// A boolean indicating if the user's email has been confirmed
-  coins          Int         @default(0) /// The number of coins the user has
-  matches        UserMatch[]
+  emailConfirmed Boolean    @default(false) /// A boolean indicating if the user's email has been confirmed
+  coins          Int        @default(0) /// The number of coins the user has
 
   @@map("users")
 }
 
 model Game {
-  id          String       @id @default(dbgenerated()) @map("_id") @db.ObjectId /// The game's ID
+  id          Int        @id @default(autoincrement()) /// The game's ID
+  users       UserGame[]
   name        String /// Descriptive name of the game
-  code        String       @unique /// It's useful for identifying the game. It must be unique
+  code        String     @unique /// It's useful for identifying the game. It must be unique
   status      String /// "betStarted" or "spinning"
-  activeUsers ActiveUser[]
   betSeconds  Int /// Seconds the user has to bet
   spinSeconds Int /// Time the spin will last
   gameData    Json /// Data for the specific game
@@ -43,43 +45,14 @@ model Game {
   @@map("games")
 }
 
-model UserMatch {
-  id          String     @id @default(dbgenerated()) @map("_id") @db.ObjectId /// The userMatch's ID
-  userId      String     @unique @db.ObjectId
-  user        User       @relation(fields: [userId], references: [id])
-  startDate   DateTime
-  endDate     DateTime
-  coinsBet    Int
-  coinsEarned Int
-  profit      Int
-  movements   Movement[]
+model UserGame {
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int
+  game      Game   @relation(fields: [gameId], references: [id])
+  gameId    Int
+  betResult String
+  betCoins  Int
 
-  @@map("userMatches")
-}
-
-// Additional models
-
-model ActiveUser {
-  id       String  @id @default(dbgenerated()) @map("_id") @db.ObjectId /// The user's ID
-  nickname String
-  bet      Bet     @relation(fields: [betId], references: [id])
-  gameId   String? @db.ObjectId
-  betId    String  @unique @db.ObjectId
-  game     Game?   @relation(fields: [gameId], references: [id])
-}
-
-model Bet {
-  id         String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  result     String
-  coins      Int
-  activeUser ActiveUser?
-}
-
-model Movement {
-  id          String     @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  coinsBet    Int
-  coinsEarned Int
-  profit      Int
-  UserMatch   UserMatch? @relation(fields: [userMatchId], references: [id])
-  userMatchId String?    @db.ObjectId
+  @@id([userId, gameId])
+  @@map("userGames")
 }
