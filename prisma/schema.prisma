@@ -34,7 +34,7 @@ model User {
 
 model Game {
   id          Int        @id @default(autoincrement()) /// The game's ID
-  users       UserGame[]
+  userGames   UserGame[]
   name        String /// Descriptive name of the game
   code        String     @unique /// It's useful for identifying the game. It must be unique
   status      String /// "betStarted" or "spinning"
@@ -46,12 +46,12 @@ model Game {
 }
 
 model UserGame {
-  user      User   @relation(fields: [userId], references: [id])
-  userId    Int
-  game      Game   @relation(fields: [gameId], references: [id])
-  gameId    Int
-  betResult String
-  betCoins  Int
+  user             User   @relation(fields: [userId], references: [id])
+  userId           Int
+  game             Game   @relation(fields: [gameId], references: [id])
+  gameId           Int
+  currentBetResult String
+  currentBetCoins  Int
 
   @@id([userId, gameId])
   @@map("userGames")

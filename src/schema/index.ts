@@ -5,6 +5,7 @@ import * as models from "nexus-prisma";
 import { getDefinition } from "src/utils/getDefinition";
 
 import user from "./user";
+import game from "./game";
 
 const filteredModels = Object.fromEntries(
   Object.entries(models).filter(([name]) => !name.startsWith("$"))
@@ -32,5 +33,5 @@ const DateTime = scalarType({
 });
 
 export default makeSchema({
-  types: [...modelTypes, ...user, Json, DateTime],
+  types: [...user, ...game, Json, DateTime, ...modelTypes],
 });
