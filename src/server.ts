@@ -10,6 +10,7 @@ const httpServer = http.createServer(app);
 const io = new socketIo.Server(httpServer);
 
 const startApolloServer = async (typeDefs: any, resolvers: any) => {
+  const port = process.env.PORT || 4000;
   const server = new ApolloServer({
     schema: typeDefs,
     context: createContext,
@@ -17,10 +18,10 @@ const startApolloServer = async (typeDefs: any, resolvers: any) => {
   });
   await server.start();
   server.applyMiddleware({ app });
-  await new Promise<void>((resolve) =>
-    httpServer.listen({ port: 4000 }, resolve)
+  await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
+  console.log(
+    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
   );
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 };
 
 export { app, httpServer, io, startApolloServer };
