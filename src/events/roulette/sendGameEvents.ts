@@ -9,7 +9,7 @@ const sendGameEvents = async () => {
   const isSpinning = roulette?.status === "spinning";
   const nextStatus = isSpinning ? "betting" : "spinning";
   // TODO calculate the result
-  const result = isSpinning ? "32" : null;
+  const result = isSpinning ? null : "32";
   const nextStatusDate = +(roulette?.nextStatusDate || new Date());
   const timeToWait = Math.max(0, nextStatusDate - +new Date());
 
