@@ -8,6 +8,8 @@ const sendGameEvents = async () => {
   });
   const isSpinning = roulette?.status === "spinning";
   const nextStatus = isSpinning ? "betting" : "spinning";
+  // TODO calculate the result
+  const result = isSpinning ? "32" : null;
   const nextStatusDate = +(roulette?.nextStatusDate || new Date());
   const timeToWait = Math.max(0, nextStatusDate - +new Date());
 
@@ -27,7 +29,7 @@ const sendGameEvents = async () => {
   console.log("updating next status date", updatedNextStatusDate);
   await prisma.game.update({
     where: { code: "roulette" },
-    data: { status: nextStatus, nextStatusDate: updatedNextStatusDate },
+    data: { status: nextStatus, nextStatusDate: updatedNextStatusDate, result },
   });
 
   // sends the corresponding socket io events
@@ -40,9 +42,9 @@ const sendGameEvents = async () => {
   } else if (nextStatus === "spinning") {
     // indicates that the game is now in spinning status
     rouletteSocket.emit("betEnded", {
-      nextBetDate: updatedNextStatusDate,
-      // TODO calculate a result and add users here
-      result: "32",
+      betStartDate: updatedNextStatusDate,
+      // TODO add users here
+      result,
       users: [],
     });
   }
