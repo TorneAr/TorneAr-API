@@ -2,6 +2,11 @@ import { prisma } from "src/context";
 import wait from "src/utils/wait";
 import { rouletteSocket } from "src/server";
 
+const getRandomResult = (min: number, max: number) => {
+  const result = Math.floor(Math.random() * (max - min) + min);
+  return result.toString();
+};
+
 const sendGameEvents = async () => {
   const roulette = await prisma.game.findUnique({
     where: { code: "roulette" },
@@ -9,7 +14,7 @@ const sendGameEvents = async () => {
   const isSpinning = roulette?.status === "spinning";
   const nextStatus = isSpinning ? "betting" : "spinning";
   // TODO calculate the result
-  const result = isSpinning ? null : "32";
+  const result = isSpinning ? null : getRandomResult(0, 37);
   const nextStatusDate = +(roulette?.nextStatusDate || new Date());
   const timeToWait = Math.max(0, nextStatusDate - +new Date());
 
