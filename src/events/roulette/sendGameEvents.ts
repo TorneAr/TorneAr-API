@@ -1,14 +1,6 @@
 import { prisma } from "src/context";
-import { io } from "../../../server";
 import wait from "src/utils/wait";
-
-io.of("/roulette").on("connection", (socket) => {
-  console.log("new connection!");
-
-  socket.on("join", (data) => {
-    console.log("received join event");
-  });
-});
+import { rouletteSocket } from "src/server";
 
 const sendGameEvents = async () => {
   const roulette = await prisma.game.findUnique({
@@ -42,12 +34,12 @@ const sendGameEvents = async () => {
   console.log("sending game events");
   if (nextStatus === "betting") {
     // indicates that the game is now in betting status
-    io.of("/roulette").emit("betStarted", {
+    rouletteSocket.emit("betStarted", {
       betEndDate: updatedNextStatusDate,
     });
   } else if (nextStatus === "spinning") {
     // indicates that the game is now in spinning status
-    io.of("/roulette").emit("betEnded", {
+    rouletteSocket.emit("betEnded", {
       nextBetDate: updatedNextStatusDate,
       // TODO calculate a result and add users here
       result: "32",
@@ -58,4 +50,4 @@ const sendGameEvents = async () => {
   sendGameEvents();
 };
 
-sendGameEvents();
+export default sendGameEvents;
