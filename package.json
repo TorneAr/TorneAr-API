@@ -9,7 +9,8 @@
     "start": "node dist/index.js",
     "generate-schema": "prisma generate",
     "lint-staged": "lint-staged",
-    "nexus-prisma": "nexus-prisma"
+    "nexus-prisma": "nexus-prisma",
+    "unimported": "unimported --no-cache"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,6 @@
   },
   "homepage": "https://github.com/TorneAr/TorneAr-API#readme",
   "dependencies": {
-    "@nexus/schema": "^0.20.1",
     "@prisma/client": "^3.5.0",
     "apollo-server-core": "^3.5.0",
     "apollo-server-express": "^3.5.0",
@@ -35,8 +35,7 @@
     "nexus": "^1.1.0",
     "nexus-prisma": "^0.34.0",
     "socket.io": "^4.3.2",
-    "source-map-support": "^0.5.20",
-    "typescript": "^4.4.4"
+    "source-map-support": "^0.5.20"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -47,7 +46,9 @@
     "prisma": "^3.5.0",
     "rimraf": "^3.0.2",
     "tsc-files": "^1.1.2",
-    "tsc-watch": "^4.5.0"
+    "tsc-watch": "^4.5.0",
+    "typescript": "^4.5.2",
+    "unimported": "^1.19.1"
   },
   "_moduleAliases": {
     "src": "dist"

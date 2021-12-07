@@ -4,3 +4,4 @@
 npm run generate-schema
 npx pretty-quick --staged
 npm run lint-staged
+npm run unimported
