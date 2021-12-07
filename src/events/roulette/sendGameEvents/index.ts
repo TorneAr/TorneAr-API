@@ -1,6 +1,7 @@
 import { prisma } from "src/context";
 import wait from "src/utils/wait";
 import { rouletteSocket } from "src/server";
+import updateCountdown from "./updateCountdown";
 
 const getRandomResult = (min: number, max: number) => {
   const result = Math.floor(Math.random() * (max - min) + min);
@@ -24,6 +25,12 @@ const sendGameEvents = async () => {
 
   await wait(timeToWait);
 
+  // Shows the spinning result for a time before starting the next bet
+  if (nextStatus === "betting") {
+    console.log("showing the result for a time");
+    await wait((roulette?.showResultSeconds || 0) * 1000);
+  }
+
   const updatedNextStatusDate = new Date(
     Date.now() +
       (isSpinning ? roulette?.betSeconds || 0 : roulette?.spinSeconds || 0) *
@@ -42,12 +49,13 @@ const sendGameEvents = async () => {
   if (nextStatus === "betting") {
     // indicates that the game is now in betting status
     rouletteSocket.emit("betStarted", {
-      betEndDate: updatedNextStatusDate,
+      nextStatusIn: Math.max(0, +new Date(updatedNextStatusDate) - +new Date()),
     });
+    updateCountdown(updatedNextStatusDate);
   } else if (nextStatus === "spinning") {
     // indicates that the game is now in spinning status
     rouletteSocket.emit("betEnded", {
-      betStartDate: updatedNextStatusDate,
+      nextStatusIn: Math.max(0, +new Date(updatedNextStatusDate) - +new Date()),
       // TODO add users here
       result,
       users: [],

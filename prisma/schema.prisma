@@ -33,16 +33,17 @@ model User {
 }
 
 model Game {
-  id             Int        @id @default(autoincrement()) /// The game's ID
-  userGames      UserGame[]
-  name           String /// Descriptive name of the game
-  code           String     @unique /// It's useful for identifying the game. It must be unique
-  status         String /// "betting" or "spinning"
-  result         String? /// The result of the current bet
-  nextStatusDate DateTime   @default(now()) /// The date when the game will change its status
-  betSeconds     Int /// Seconds the user has to bet
-  spinSeconds    Int /// Time the spin will last
-  gameData       Json /// Data for the specific game
+  id                Int        @id @default(autoincrement()) /// The game's ID
+  userGames         UserGame[]
+  name              String /// Descriptive name of the game
+  code              String     @unique /// It's useful for identifying the game. It must be unique
+  status            String /// "betting" or "spinning"
+  result            String? /// The result of the current bet
+  nextStatusDate    DateTime   @default(now()) /// The date when the game will change its status
+  betSeconds        Int /// Seconds the user has to bet
+  spinSeconds       Int /// Time the spin will last
+  showResultSeconds Int /// Time the result will last in the screen
+  gameData          Json /// Data for the specific game
 
   @@map("games")
 }
