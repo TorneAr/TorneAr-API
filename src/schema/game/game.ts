@@ -1,5 +1,22 @@
+import { Game } from ".prisma/client";
 import { extendType, nonNull, stringArg } from "nexus";
 import { Context } from "src/context";
+
+const ExtendedGame = extendType({
+  type: "Game",
+  definition(t) {
+    t.int("nextStatusIn", {
+      resolve(parent: Game, args, ctx: Context) {
+        const timeToWait = Math.max(
+          0,
+          +new Date(parent.nextStatusDate) - +new Date()
+        );
+
+        return timeToWait;
+      },
+    });
+  },
+});
 
 const game = extendType({
   type: "Query",
@@ -20,4 +37,4 @@ const game = extendType({
   },
 });
 
-export default [game];
+export default [game, ExtendedGame];

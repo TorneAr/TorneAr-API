@@ -1,1 +1,2 @@
-import "./games";
+import "./general";
+import "./roulette";
