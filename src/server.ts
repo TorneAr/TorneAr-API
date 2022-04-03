@@ -10,7 +10,7 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = new socketIo.Server(httpServer);
 
-app.use(cors());
+app.use(cors({ origin: true }));
 
 const startApolloServer = async (typeDefs: any, resolvers: any) => {
   const port = process.env.PORT || 4000;
