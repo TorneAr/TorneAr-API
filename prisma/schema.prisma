@@ -44,6 +44,7 @@ model Game {
   spinSeconds       Int /// Time the spin will last
   showResultSeconds Int /// Time the result will last in the screen
   gameData          Json /// Data for the specific game
+  lastResults       String? /// An array of the last results of the game
 
   @@map("games")
 }

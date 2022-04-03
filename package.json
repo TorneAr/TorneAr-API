@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && npm run generate-schema && tsc",
     "dev": "rimraf dist && tsc-watch --onSuccess \"node dist/index.js\"",
     "start": "node dist/index.js",
     "generate-schema": "prisma generate",
