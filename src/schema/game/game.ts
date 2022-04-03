@@ -15,6 +15,11 @@ const ExtendedGame = extendType({
         return timeToWait;
       },
     });
+    t.list.string("lastResults", {
+      resolve(parent: Game, args, ctx: Context) {
+        return (parent.lastResults || "").split(",").filter((x) => x);
+      },
+    });
   },
 });
 
