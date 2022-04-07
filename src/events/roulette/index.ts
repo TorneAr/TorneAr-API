@@ -1,12 +1,10 @@
 import { rouletteSocket } from "src/server";
-import sendGameEvents from "./sendGameEvents";
+import { getUserFromToken } from "src/utils/getUserFromToken";
+import sendGameEvents from "./output/sendGameEvents";
 
-rouletteSocket.on("connection", (socket) => {
-  console.log("new connection on roulette!");
-
-  socket.on("join", (data) => {
-    console.log("received join event");
-  });
+rouletteSocket.on("connection", async (socket) => {
+  const user = await getUserFromToken(socket.handshake.auth.accessToken);
+  console.log("New connection on roulette from user", user?.name);
 });
 
 sendGameEvents();

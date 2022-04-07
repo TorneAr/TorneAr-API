@@ -1,5 +1,5 @@
 import { Game } from ".prisma/client";
-import { extendType, nonNull, stringArg } from "nexus";
+import { extendType, nonNull, objectType, stringArg } from "nexus";
 import { Context } from "src/context";
 
 const ExtendedGame = extendType({
@@ -23,6 +23,11 @@ const ExtendedGame = extendType({
   },
 });
 
+const GameMutations = objectType({
+  name: "GameMutations",
+  definition(t) {},
+});
+
 const game = extendType({
   type: "Query",
   definition(t) {
@@ -42,4 +47,23 @@ const game = extendType({
   },
 });
 
-export default [game, ExtendedGame];
+const gameMutation = extendType({
+  type: "Mutation",
+  definition(t) {
+    t.field("game", {
+      type: "GameMutations",
+      args: {
+        code: nonNull(stringArg({ description: "The game code" })),
+      },
+      resolve: async (parent, args, ctx: Context) => {
+        const game = await ctx.prisma.game.findUnique({
+          where: { code: args.code },
+        });
+
+        return game;
+      },
+    });
+  },
+});
+
+export default [game, gameMutation, ExtendedGame, GameMutations];

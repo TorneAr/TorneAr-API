@@ -3,14 +3,14 @@ import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import express from "express";
 import http from "http";
 import socketIo from "socket.io";
-import cors from "cors";
+import middlewares from "./middlewares";
 import { createContext } from "./context";
 
 const app = express();
 const httpServer = http.createServer(app);
 const io = new socketIo.Server(httpServer);
 
-app.use(cors({ origin: true }));
+app.use(middlewares);
 
 const startApolloServer = async (typeDefs: any, resolvers: any) => {
   const port = process.env.PORT || 4000;
@@ -30,4 +30,11 @@ const startApolloServer = async (typeDefs: any, resolvers: any) => {
 const rouletteSocket = io.of("/roulette");
 const generalSocket = io.of("/general");
 
-export { app, httpServer, generalSocket, rouletteSocket, startApolloServer };
+export {
+  app,
+  httpServer,
+  io,
+  generalSocket,
+  rouletteSocket,
+  startApolloServer,
+};
