@@ -49,7 +49,7 @@ const GameMutations = extendType({
         });
 
         // Notifies the users playing the current game that a new bet has been made
-        io.of(`/${parent.code}`).emit("betCreated", {
+        io.of(`/games/${parent.code}`).emit("betCreated", {
           userId: ctx.user.id,
           result: args.result,
           coins: args.coins,

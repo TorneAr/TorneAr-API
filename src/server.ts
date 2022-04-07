@@ -27,7 +27,7 @@ const startApolloServer = async (typeDefs: any, resolvers: any) => {
   );
 };
 
-const rouletteSocket = io.of("/roulette");
+const rouletteSocket = io.of("/games/roulette");
 const generalSocket = io.of("/general");
 
 export {
