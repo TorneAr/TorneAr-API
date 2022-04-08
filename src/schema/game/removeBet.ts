@@ -31,7 +31,7 @@ const GameMutations = extendType({
         });
 
         // Notifies the users playing the current game that a bet has been removed
-        io.of(`/${parent.code}`).emit("betRemoved", {
+        io.of(`/games/${parent.code}`).emit("betRemoved", {
           userId: ctx.user.id,
         });
 
