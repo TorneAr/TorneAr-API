@@ -55,7 +55,7 @@ const GameMutations = extendType({
 
         userSocket
           .to(`/users/${ctx.user.id}`)
-          .emit("coinsUpdated", { coins: newCoins });
+          .emit("userUpdated", { coins: newCoins });
 
         // Notifies the users playing the current game that a new bet has been made
         io.of(`/games/${parent.code}`).emit("betCreated", {

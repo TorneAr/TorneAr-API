@@ -40,7 +40,7 @@ const GameMutations = extendType({
 
           userSocket
             .to(`/users/${user.id}`)
-            .emit("coinsUpdated", { coins: newCoins });
+            .emit("userUpdated", { coins: newCoins });
 
           return update;
         });

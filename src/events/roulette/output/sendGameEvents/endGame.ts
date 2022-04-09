@@ -21,7 +21,7 @@ const endGame = async (game: Game, result: string) => {
       });
       userSocket
         .to(`/users/${gameBet.userId}`)
-        .emit("coinsUpdated", { coins: newCoins });
+        .emit("userUpdated", { coins: newCoins });
     }
   });
 
