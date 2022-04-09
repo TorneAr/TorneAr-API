@@ -4,7 +4,8 @@ import sendGameEvents from "./output/sendGameEvents";
 
 rouletteSocket.on("connection", async (socket) => {
   const user = await getUserFromToken(socket.handshake.auth.accessToken);
-  console.log("New connection on roulette from user", user?.name);
+
+  console.log("New connection on namespace 'roulette' from user", user?.name);
 });
 
 sendGameEvents();
