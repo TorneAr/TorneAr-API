@@ -2,7 +2,7 @@ import { Game } from "@prisma/client";
 import { AuthenticationError, ValidationError } from "apollo-server-core";
 import { extendType, nonNull, objectType, stringArg, intArg, arg } from "nexus";
 import { Context } from "src/context";
-import { io } from "src/server";
+import { io, userSocket } from "src/server";
 
 const BetResponse = objectType({
   name: "BetResponse",
@@ -29,24 +29,33 @@ const GameMutations = extendType({
           throw new ValidationError("You don't have enough coins");
         }
 
-        await ctx.prisma.userGame.upsert({
-          where: {
-            userId_gameId: {
-              userId: ctx.user.id,
-              gameId: parent.id,
+        const newCoins = ctx.user.coins - args.coins;
+
+        await ctx.prisma.$transaction([
+          ctx.prisma.userGame.upsert({
+            where: {
+              userId_gameId: { userId: ctx.user.id, gameId: parent.id },
             },
-          },
-          create: {
-            gameId: parent.id,
-            userId: ctx.user.id,
-            currentBetCoins: args.coins,
-            currentBetResult: args.result,
-          },
-          update: {
-            currentBetCoins: args.coins,
-            currentBetResult: args.result,
-          },
-        });
+            create: {
+              gameId: parent.id,
+              userId: ctx.user.id,
+              currentBetCoins: args.coins,
+              currentBetResult: args.result,
+            },
+            update: {
+              currentBetCoins: args.coins,
+              currentBetResult: args.result,
+            },
+          }),
+          ctx.prisma.user.update({
+            where: { id: ctx.user.id },
+            data: { coins: newCoins },
+          }),
+        ]);
+
+        userSocket
+          .to(`/users/${ctx.user.id}`)
+          .emit("coinsUpdated", { coins: newCoins });
 
         // Notifies the users playing the current game that a new bet has been made
         io.of(`/games/${parent.code}`).emit("betCreated", {

@@ -24,6 +24,8 @@ const endGame = async (game: Game, result: string) => {
         .emit("coinsUpdated", { coins: newCoins });
     }
   });
+
+  await prisma.userGame.deleteMany({ where: { gameId: game.id } });
 };
 
 export default endGame;
