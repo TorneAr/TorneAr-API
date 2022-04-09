@@ -1,5 +1,5 @@
-import user from "./user";
+import currentUser from "./currentUser";
 import createUser from "./createUser";
 import login from "./login";
 
-export default [...user, ...createUser, ...login];
+export default [...createUser, ...login, ...currentUser];

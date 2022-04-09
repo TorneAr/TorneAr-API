@@ -53,6 +53,6 @@
     "src": "dist"
   },
   "lint-staged": {
-    "**/*.ts": "tsc-files --noEmit"
+    "**/*.ts": "tsc-files --noEmit --declaration ./src/types/lib.d.ts"
   }
 }
