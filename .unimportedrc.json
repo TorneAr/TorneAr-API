@@ -12,7 +12,7 @@
     "**/__tests__/**",
     "**/*.d.ts"
   ],
-  "ignoreUnimported": [],
+  "ignoreUnimported": ["src/seeds/**"],
   "ignoreUnresolved": [],
   "ignoreUnused": []
 }
